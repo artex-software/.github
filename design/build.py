@@ -199,8 +199,8 @@ def hero(t):
         logo(cx - 30, 64, 60, t["text"]),
     )
     svg.text("artex software", cx, 196, "text-semi", 28, t["text2"], "middle")
-    svg.text("Precision,", cx, 316, "display", 120, t["text"], "middle")
-    svg.text("engineered.", cx, 438, "display", 120, "url(#spectrum)", "middle")
+    svg.text("Performance,", cx, 316, "display", 120, t["text"], "middle")
+    svg.text("engineering.", cx, 438, "display", 120, "url(#spectrum)", "middle")
     svg.text("Systems and software, designed with intention and built to last.", cx, 524, "text", 28, t["text2"], "middle")
     return svg
 
