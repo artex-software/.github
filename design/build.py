@@ -170,7 +170,7 @@ def logo(x, y, size, fill):
 
 def hero(t):
     H = 570
-    svg = Svg(H, "artex software. Precision, engineered. Systems and software, designed with intention and built to last.", t)
+    svg = Svg(H, "artex software. Performance, engineering. Systems and software, designed with intention and built to last.", t)
     cx, cy = W / 2, 330
 
     for i, c in enumerate(GLOW):

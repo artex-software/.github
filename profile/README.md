@@ -2,7 +2,7 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./media/hero-dark.svg">
-  <img src="./media/hero-light.svg" width="100%" alt="artex software. Precision, engineered. Systems and software, designed with intention and built to last.">
+  <img src="./media/hero-light.svg" width="100%" alt="artex software. Performance, engineering. Systems and software, designed with intention and built to last.">
 </picture>
 
 <br><br>
