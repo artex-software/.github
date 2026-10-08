@@ -81,14 +81,14 @@ THEMES = {
         text="#1d1d1f", text2="#6e6e73", text3="#86868b", accent="#0071e3",
         canvas="#fbfbfd", tile="#f5f5f7", hair="#d2d2d7", line="#c7c7cc",
         node="#ffffff", node_stroke="#e8e8ed", hub="#1d1d1f", hub_fg="#ffffff",
-        term="#1d1d1f", term_stroke="none", green="#28cd41", glow=0.7, ambient=0.05,
+        term="#1d1d1f", term_stroke="none", green="#28cd41", aura=0.28,
         shadow=True,
     ),
     "dark": dict(
         text="#f5f5f7", text2="#a1a1a6", text3="#6e6e73", accent="#2997ff",
         canvas="#000000", tile="#141416", hair="#2c2c2e", line="#48484a",
         node="#1c1c1e", node_stroke="#2c2c2e", hub="#f5f5f7", hub_fg="#000000",
-        term="#0a0a0a", term_stroke="#2c2c2e", green="#30d158", glow=1.0, ambient=0.16,
+        term="#0a0a0a", term_stroke="#2c2c2e", green="#30d158", aura=0.55,
         shadow=False,
     ),
 }
@@ -169,51 +169,39 @@ def logo(x, y, size, fill):
 # ── Sections ─────────────────────────────────────────────────────────────────
 
 def hero(t):
-    H = 650
+    H = 570
     svg = Svg(H, "artex software. Precision, engineered. Systems and software, designed with intention and built to last.", t)
-    band = 120
+    cx, cy = W / 2, 330
 
-    svg.defs.append(f'<clipPath id="card"><rect width="{W}" height="{H}" rx="40"/></clipPath>')
     for i, c in enumerate(GLOW):
         svg.defs.append(f'<radialGradient id="g{i}"><stop offset="0" stop-color="{c}"/>'
                         f'<stop offset="1" stop-color="{c}" stop-opacity="0"/></radialGradient>')
-    # Eased falloff so the glow has no visible inner edge.
+    # Frameless aura: an eased radial falloff, so the colour has no edges at all.
     fade = "".join(f'<stop offset="{o}" stop-color="#fff" stop-opacity="{a}"/>'
-                   for o, a in [(0, 1), (.12, .62), (.3, .3), (.55, .1), (.8, .025), (1, 0)])
-    for gid, (x1, y1, x2, y2) in {"fT": (0, 0, 0, 1), "fB": (0, 1, 0, 0), "fL": (0, 0, 1, 0), "fR": (1, 0, 0, 0)}.items():
-        svg.defs.append(f'<linearGradient id="{gid}" x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}">{fade}</linearGradient>')
+                   for o, a in [(0, 1), (.2, .84), (.4, .54), (.6, .25), (.8, .07), (.92, .015), (1, 0)])
     svg.defs.append(
-        f'<mask id="edge" maskUnits="userSpaceOnUse" x="0" y="0" width="{W}" height="{H}">'
-        f'<rect width="{W}" height="{band}" fill="url(#fT)"/><rect y="{H - band}" width="{W}" height="{band}" fill="url(#fB)"/>'
-        f'<rect width="{band}" height="{H}" fill="url(#fL)"/><rect x="{W - band}" width="{band}" height="{H}" fill="url(#fR)"/></mask>'
-        f'<mask id="rim" maskUnits="userSpaceOnUse" x="0" y="0" width="{W}" height="{H}">'
-        f'<rect x="1.5" y="1.5" width="{W - 3}" height="{H - 3}" rx="38.5" stroke="#fff" stroke-width="3"/></mask>'
-        f'<radialGradient id="amb"><stop offset="0" stop-color="#bf5af2"/><stop offset="1" stop-color="#bf5af2" stop-opacity="0"/></radialGradient>'
+        f'<radialGradient id="fade">{fade}</radialGradient>'
+        f'<mask id="aura" maskUnits="userSpaceOnUse" x="0" y="0" width="{W}" height="{H}">'
+        f'<ellipse cx="{cx}" cy="{cy}" rx="{W / 2}" ry="{H / 2}" fill="url(#fade)"/></mask>'
     )
     svg.gradient("spectrum", SPECTRUM)
 
-    cx, cy = W / 2, H / 2
-    svg.css.append(f".spin{{transform-origin:{cx}px {cy}px;animation:spin 14s linear infinite}}"
+    svg.css.append(f".spin{{transform-origin:{cx}px {cy}px;animation:spin 16s linear infinite}}"
                    "@keyframes spin{to{transform:rotate(360deg)}}")
     blobs = "".join(
-        f'<circle cx="{cx + 430 * math.cos(2 * math.pi * i / len(GLOW)):.0f}" '
-        f'cy="{cy + 430 * math.sin(2 * math.pi * i / len(GLOW)):.0f}" r="560" fill="url(#g{i})"/>'
+        f'<circle cx="{cx + 300 * math.cos(2 * math.pi * i / len(GLOW)):.0f}" '
+        f'cy="{cy + 170 * math.sin(2 * math.pi * i / len(GLOW)):.0f}" r="360" fill="url(#g{i})"/>'
         for i in range(len(GLOW))
     )
 
     svg.add(
-        '<g clip-path="url(#card)">',
-        f'<rect width="{W}" height="{H}" fill="{t["canvas"]}"/>',
-        f'<ellipse cx="{cx}" cy="400" rx="560" ry="240" fill="url(#amb)" opacity="{t["ambient"]}"/>',
-        f'<g mask="url(#edge)" opacity="{t["glow"]}"><g class="spin">{blobs}</g></g>',
-        f'<g mask="url(#rim)"><g class="spin">{blobs}</g></g>',
-        "</g>",
-        logo(cx - 30, 88, 60, t["text"]),
+        f'<g mask="url(#aura)" opacity="{t["aura"]}"><g class="spin">{blobs}</g></g>',
+        logo(cx - 30, 64, 60, t["text"]),
     )
-    svg.text("artex software", cx, 220, "text-semi", 28, t["text2"], "middle")
-    svg.text("Precision,", cx, 340, "display", 120, t["text"], "middle")
-    svg.text("engineered.", cx, 462, "display", 120, "url(#spectrum)", "middle")
-    svg.text("Systems and software, designed with intention and built to last.", cx, 548, "text", 28, t["text2"], "middle")
+    svg.text("artex software", cx, 196, "text-semi", 28, t["text2"], "middle")
+    svg.text("Precision,", cx, 316, "display", 120, t["text"], "middle")
+    svg.text("engineered.", cx, 438, "display", 120, "url(#spectrum)", "middle")
+    svg.text("Systems and software, designed with intention and built to last.", cx, 524, "text", 28, t["text2"], "middle")
     return svg
 
 

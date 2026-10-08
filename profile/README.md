@@ -44,6 +44,12 @@
   <img src="./media/footer-light.svg" width="100%" alt="Designed and engineered by Artex. © 2026 Artex Software. All rights reserved.">
 </picture>
 
-<a href="https://artexsoftware.com">artexsoftware.com</a>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="https://github.com/artex-agency">Artex Agency</a>
+<a href="https://artexagency.com">artex agency</a><br>
+
+<a href="https://artexsoftware.com" title="Artex Software - Software Engineering and Development">software</a>
+&nbsp;&nbsp;·&nbsp;&nbsp;
+<a href="https://artexcreative.com" title="Artex Creative">creative</a>
+&nbsp;&nbsp;·&nbsp;&nbsp;
+<a href="https://artexcreative.com" title="Artex Creative">creative</a>
 
 </div>
